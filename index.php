@@ -12,7 +12,10 @@ if (isset($_SESSION['Logged']))
     <head>
         <title></title>
         <style>
-
+            body {
+                margin-top: 50px;
+                font-family: "Times New Roman", Georgia, Serif;
+            }
             #frmLogin{
                 /*width: 80%;*/
                 margin: 0 auto;*/
@@ -45,20 +48,45 @@ if (isset($_SESSION['Logged']))
 
             #tblRegLog td{
                 vertical-align: text-top;
-                height: 2em;
-            }
-
-            table{
-
             }
 
             #tblRegLog{
                 margin: auto;
             }
 
+            a {
+                text-align: center;
+            }
+
+            #menu {
+                margin-left: 0%;
+                top: 0px;
+                left: 0px;
+                position: fixed;
+                width: 100%;
+                height: 41px;
+                padding-left: 10%;
+                background-color: red;
+                margin-left: auto;
+                margin-right: 5%;
+            }
+
+            #menu a {
+                color: white;
+                display: inline-block;
+                height: 35px;
+                width: 60px;
+                padding-left: 20px;
+                padding-right: 20px;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                text-decoration: none;
+            }
+
         </style>
     </head>
     <body>
+
         <table id="tblRegLog">
             <thead>
                 <tr>
@@ -79,5 +107,11 @@ if (isset($_SESSION['Logged']))
                 </td>
             </tr>
         </table>
+
+        <nav id="menu">
+            <a href="categorie.php">Categorie</a>
+            <a href="index.php">Registreer|Login</a>
+        </nav>
+
     </body>
 </html>

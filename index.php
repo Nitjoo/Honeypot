@@ -3,7 +3,7 @@
 session_start();
 if (isset($_SESSION['Logged']))
 {
-    header('location: loggedTest.php');
+    header('location: categorie.php');
 }
 
 ?>

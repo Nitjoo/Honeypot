@@ -13,24 +13,28 @@
         }
 
         .catStyle {
-            padding: 20px;
+            padding: 15px;
         }
 
         a {
             text-align: center;
+            text-decoration: none;
+            color: red;
+            
+        }
+        
+        a:hover {
+            color: grey;
         }
 
         #menu {
-            margin-left: 0%;
-            top: 0px;
-            left: 0px;
-            position: fixed;
-            width: 100%;
-            height: 41px;
-            padding-left: 10%;
             background-color: red;
-            margin-left: auto;
-            margin-right: 5%;
+            margin-left: 0px;
+            left: 0px;
+            top:0px;
+            position: fixed;
+            width: 100px;
+            height: 100%;
         }
 
         #menu a {
@@ -38,10 +42,10 @@
             display: inline-block;
             height: 35px;
             width: 60px;
-            padding-left: 20px;
-            padding-right: 20px;
-            padding-top: 10px;
-            padding-bottom: 10px;
+            padding-left: 10px;
+            padding-right: 10px;
+            padding-top: 20px;
+            padding-bottom: 20px;
             text-decoration: none;
         }
     </style>
@@ -50,7 +54,7 @@
 
 
     <nav id="menu">
-        <a href="categorie.php">Categorie</a>
+        <a href="categorie.php">Forum</a>
         <a href="index.php"><?php include_once "loginCheck.php"; if($_SESSION['Logged'] != ''){ echo 'Logout'; } else { echo 'Registreer|Login'; } ?></a>
     </nav>
     <?php
@@ -66,7 +70,7 @@
         while( $row = mysqli_fetch_array($result)) {
             $catID = str_replace(" ", "", $row['CategorieID']);
             echo "<div class='catStyle'>";
-            echo "<a class='catStyle' href='?cat=".$catID."'>".$row['Title']."</a>";
+            echo "<h2><a class='catStyle' href='?cat=".$catID."'>".$row['Title']."</a></h2>";
             echo "</div>";
             echo "<hr><br>";
         }

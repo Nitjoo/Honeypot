@@ -5,10 +5,6 @@
  * Date: 8/10/2014
  * Time: 20:53
  */
-$error = 0;
-if(isset($_GET['error'])){
-    $error = $_GET['error'];
-}
 
 ?>
 
@@ -17,13 +13,7 @@ if(isset($_GET['error'])){
         <tr>
             <td><label for="inUsername">Username: </label></td>
             <td><input type="text" name="inUsername" placeholder="Enter a Username" /></td>
-            <td>*
-                <?php
-                if($error == 4){
-                    echo 'Username or email already exists.';
-                }
-                ?>
-            </td>
+            <td>*</td>
         </tr>
         <tr>
             <td><label for="inFirstName">First Name: </label></td>
@@ -38,15 +28,7 @@ if(isset($_GET['error'])){
         <tr>
             <td><label for="inEmail">Email: </label></td>
             <td><input type="text" name="inEmail" placeholder="Enter Your Howest Email" /></td>
-            <td>*
-                <?php
-                if($error == 4){
-                    echo 'Username or email already exists.';
-                }elseif($error == 2){
-                    echo 'Emails dont match';
-                }
-                ?>
-            </td>
+            <td>*</td>
         </tr>
         <tr>
             <td><label for="inConfirmEmail">Confirm Email: </label></td>
@@ -56,13 +38,7 @@ if(isset($_GET['error'])){
         <tr>
             <td><label for="inPassword">Password: </label></td>
             <td><input type="password" name="inPassword" placeholder="Enter Your Password"/></td>
-            <td>*
-                <?php
-                if($error == 3){
-                    echo 'Passwords dont match';
-                }
-                ?>
-            </td>
+            <td>*</td>
         </tr>
         <tr>
             <td><label for="inConfirmPassword">Confirm Password: </label></td>
@@ -72,13 +48,6 @@ if(isset($_GET['error'])){
         <tr>
             <td></td>
             <td><input id="btnRegister" type="submit" value="Register"></td>
-            <td>
-                <?php
-                if($error == 1){
-                    echo 'Fill in all the required fields';
-                }
-                ?>
-            </td>
         </tr>
     </table>
 </form>

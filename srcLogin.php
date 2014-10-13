@@ -10,14 +10,13 @@ if($_POST['inUsername'] && $_POST['inPassword']){
     $inUsername = htmlentities($_POST['inUsername']);
     $inPassword = htmlentities($_POST['inPassword']);
 }else{
-    header('Location: index.php?error=5');
+    header('Location: '.$_SERVER['HTTP_REFERER']."?error=5");
     die();
 }
 
 include_once 'DBConnect.php';
 if($dbh->connect_error){
-    echo $dbh->error;
-    die();
+
 }else{
 
     $inUsername = $dbh->real_escape_string($inUsername);
@@ -38,8 +37,7 @@ if($dbh->connect_error){
             }
             $result->close();
         }else{
-            //echo mysqli_num_rows($result);
-            header('Location: index.php?error=6' );
+            header('Location: ' .$_SERVER['HTTP_REFERER']."?error=6" );
             $result->close();
             die();
         }

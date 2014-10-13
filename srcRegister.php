@@ -19,17 +19,17 @@ if($_POST['inUsername'] && $_POST['inFirstName'] && $_POST['inLastName'] && $_PO
 
     $ip = $_SERVER['REMOTE_ADDR'];
 }else{
-    header('Location: index.php?error=1');
+    header('Location: '.$_SERVER['HTTP_REFERER']."?error=1");
     die();
 }
 
 if($inEmail != $inConfirmEmail){
-    header('Location: index.php?error=2' );
+    header('Location: ' .$_SERVER['HTTP_REFERER']."?error=2" );
     die();
 }
 
 if($inPassword != $inConfirmPassword){
-    header('Location: index.php?error=3' );
+    header('Location: ' .$_SERVER['HTTP_REFERER']."?error=3" );
     die();
 }else{
     $inPassword = md5(md5($inPassword) + $inPassword);
@@ -58,7 +58,7 @@ if($dbh->connect_errno){
 
 
         if(mysqli_num_rows($result) <> 0){
-            header('Location: index.php?error=4' );
+            header('Location: ' .$_SERVER['HTTP_REFERER']."?error=4" );
             $result->close();
             die();
         }else{

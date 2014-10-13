@@ -27,6 +27,13 @@
 
         a {
             text-align: center;
+            text-decoration: none;
+            color: red;
+
+        }
+
+        a:hover {
+            color: grey;
         }
 
         #header {
@@ -36,14 +43,12 @@
 
         #menu {
             background-color: red;
-            margin-left: 5%;
+            margin-left: 0px;
             left: 0px;
             top:0px;
             position: fixed;
             width: 100px;
             height: 100%;
-            background-color: red;
-            margin-left: 0px;
         }
 
         #menu a {
@@ -86,12 +91,31 @@
             color: red;
             text-align: right;
         }
+
+        h1 {
+            text-align: center;
+            font-size: 60px;
+            height: 65px;
+        }
+
+        .goback {
+            width: 100%;
+            height: 10px;
+            background-color: red;
+            text-align: left;
+        }
+
+        #goback a {
+            text-decoration: none;
+            font-size: 20px;
+        }
+
     </style>
 </head>
 <body>
 <div id="fullBody">
     <nav id="menu">
-        <a href="categorie.php">Categorie</a><br>
+        <a href="categorie.php">Forum</a><br>
         <a href="index.php" id="login"><?php include_once "loginCheck.php"; if($_SESSION['Logged'] != ''){ echo 'Logout'; } else { echo 'Registreer|Login'; } ?></a>
     </nav>
     <div id="header">
@@ -102,7 +126,15 @@
                 echo "Failed to connect to database. Error: " . $dbh->connect_error;
                 die();
             } else {
-                getThreadTitle();
+                include_once 'DBConnect.php';
+                global $dbh;
+                $cat = htmlentities($_GET['cat']);
+                $resultThreads = mysqli_query($dbh, "SELECT Title FROM tblCategorie WHERE CategorieID='".htmlentities($cat)."'");
+                $result = mysqli_fetch_array($resultThreads);
+
+                echo getThreadTitle();
+                echo "<div id='goback' class='goback'><a href='categorie.php?cat=".$cat."'>>".$result['Title']."</a></div>";
+
             }
             ?>
         </h1>
@@ -154,14 +186,18 @@
                                     $resultMessages = mysqli_query($dbh, "SELECT * FROM tblMessages WHERE (ThreadID='".$thread."') AND (PostID BETWEEN '" . ((($currentpage - 1) * 15) + 1) . "' AND '" . (($currentpage) * 15) . "')");
                                 }
 
+                                $viewed = mysqli_query($dbh, "INSERT INTO `honeypot`.`tblviewedthreads` (`ID`, `ThreadID`, `UserID`) VALUES (NULL, '".$thread."', '".getUserID($_SESSION['Logged'])."')");
+
+
                                 while ($row = mysqli_fetch_array($resultMessages)) {
                                     $resultUserName = mysqli_query($dbh, "SELECT tblUsers.UserName FROM `tblMessages` JOIN tblUsers on tblUsers.UserID = tblMessages.UserID WHERE tblUsers.UserID = " . $row['UserID']);
-                                    $rowUser = mysqli_fetch_array($resultUserName);
+                                    $rowUser = mysqli_fetch_array($resultUserName);                                   
                                     echo "<table class='tblHistoryMessages' id=" . $row['PostID'] . ">";
                                     echo "<tr>";
                                     echo "<td style='width: 17%'>";
                                     //FOTO HIER
-                                    echo "<a href='profiel.php?Username=" . $rowUser['UserName'] . "' class='userlink'><img src='https://forums.oneplus.net/styles/oneplus2014/xenforo/avatars/avatar_l.png' /></a>";
+                                    include'srcGetPicture.php';
+                                    //echo "<a href='profiel.php?Username=" . $rowUser['UserName'] . "' class='userlink'><img src='https://forums.oneplus.net/styles/oneplus2014/xenforo/avatars/avatar_l.png' /></a>";
                                     echo "<p style='color: red'><a href='profiel.php?Username=" . $rowUser['UserName'] . "' class='userlink'>" . $rowUser['UserName'] . "</a></p>";
                                     echo $row['DateTime'];
                                     echo "</td>";
@@ -183,11 +219,17 @@
                             }
                         }
                     } else {
-                        header("Location: showthread.php?thread=".$thread."&page=1");
+                        global $cat;
+                        header("Location: showthread.php?cat=".$cat."&thread=".$thread."&page=1");
                     }
                 }
 
-
+                function getUserID($username) {
+                    global $dbh;
+                    $resultUserID = mysqli_query($dbh, "SELECT UserID FROM tblusers WHERE Username='".$username."'");
+                    $resultUser = mysqli_fetch_array($resultUserID);
+                    return $resultUser['UserID'];
+                }
 
                 function getPages($currentpagevar) {
                     global $dbh;
@@ -199,10 +241,10 @@
 
                         echo "<div id='divPages'>Page:";
                         for ($i = 1; $i < ($row[0] / 15) + 1; $i++) {
-                            if ($i == $currentpagevar){
-                                echo "<a href='?page=" . $i . "' class='fontPagesCurrent'> [" . $i . "] </a>";
+                            if ($i == ceil($currentpagevar)){
+                                echo "<a href='showthread.php?cat=".$_SESSION['currentCat']."&thread=".$thread."&page=" . $i . "' class='fontPagesCurrent'> [" . $i . "] </a>";
                             } else {
-                                echo "<a href='?page=" . $i . "' class='fontPagesNormal'> [" . $i . "] </a>";
+                                echo "<a href='showthread.php?cat=".$_SESSION['currentCat']."&thread=".$thread."&page=" . $i . "' class='fontPagesNormal'> [" . $i . "] </a>";
                             }
                         }
                         echo "</div>";

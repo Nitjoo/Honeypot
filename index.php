@@ -3,7 +3,7 @@
 session_start();
 if (isset($_SESSION['Logged']))
 {
-    header('location: categorie.php');
+    header('location: loggedTest.php');
 }
 
 ?>
@@ -69,10 +69,12 @@ if (isset($_SESSION['Logged']))
                 background-color: red;
                 margin-left: auto;
                 margin-right: 5%;
+                display: inline-block;
             }
 
             #menu a {
                 color: white;
+                font-weight: bold;
                 display: inline-block;
                 height: 35px;
                 width: 60px;
@@ -81,17 +83,16 @@ if (isset($_SESSION['Logged']))
                 padding-top: 10px;
                 padding-bottom: 10px;
                 text-decoration: none;
+                float: left;
             }
 
         </style>
     </head>
     <body>
-
         <table id="tblRegLog">
             <thead>
                 <tr>
                     <th>Register</th>
-                    <th>Login</th>
                 </tr>
             </thead>
             <tr>
@@ -101,17 +102,18 @@ if (isset($_SESSION['Logged']))
                     ?>
                 </td>
                 <td>
-                    <?php
-                        include_once 'formLogin.php';
-                    ?>
                 </td>
             </tr>
         </table>
 
-        <nav id="menu">
-            <a href="categorie.php">Categorie</a>
-            <a href="index.php">Registreer|Login</a>
-        </nav>
 
+        <nav id="menu">
+            <a href="index.php">Registreer|Login</a>
+            <div id="login" style="vertical-align: middle;line-height: 50px;">
+                <?php
+                include_once 'formLogin.php';
+                ?>
+            </div>
+        </nav>
     </body>
 </html>

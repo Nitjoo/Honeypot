@@ -29,8 +29,18 @@
 			clear: left;
 		}
 
-        a {
+        nav a {
             text-align: center;
+        }
+
+        a {
+            text-align: left;
+            text-decoration: none;
+            color: black;
+        }
+
+        a:hover {
+            color: grey;
         }
 
         #menu {
@@ -66,15 +76,19 @@
         
         #colLeft{
             float:left;
-            width: 500px;
+            width: 170px;
+        }
+        
+        #colRight{
+            margin-left: 170px;
+            width: auto;
         }
     </style>
 </head>
 <body>
     <div id="navigationBar">
         <nav id="menu">
-            <a href="categorie.php">Categorie</a>
-            <a href="forumdb.php">Forum</a>
+            <a href="categorie.php">Forum</a>
             <a href="index.php" id="login"><?php include_once "loginCheck.php"; if($_SESSION['Logged'] != ''){ echo 'Logout'; } else { echo 'Registreer|Login'; } ?></a>
         </nav>
     </div>
@@ -82,23 +96,26 @@
         <div id="content">
             <h1>Profile</h1>
             <div id="colLeft">
-                <img id="profilePic" src="afbeeldingen/10256141_771309279560479_7727550214915955311_o.jpg"/>
+                <?php 
+                    include_once 'srcGetProfile.php';
+                    include_once 'srcGetPicture.php';
+                ?>
             </div>
             
             <div id="colRight">
-                <h2>Username:</h2>
-                <h2>Surname:</h2>
-                <h2>Name:</h2>
-                <a href="#"><h2>Edit password</h2></a>
-                <!--<h2>Achievements</h2>-->
-            </div>
-            <div>
-            <?php include_once 'formUploadPicture.html';?>
+                <?php 
+                    include_once 'srcGetProfile.php';
+                    echo "<h2>Username: " . $data['UserName'] . "</h2>";
+                    echo "<h2>First name: " . $data['FirstName'] . "</h2>";
+                    echo "<h2>Last Name: " . $data['LastName'] . "</h2>";
+                    //Show edit                
+                    if($_SESSION['Logged'] == $_GET['Username']){
+                    include_once 'formUploadPicture.php';
+                    include_once 'formChangePassword.php';}
+                ?>
             </div>
         </div>
-            
     </div>
-	
     <footer>Tommy - Giani - Jonas - Nicho</footer>
 </body>
 </html>

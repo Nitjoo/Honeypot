@@ -27,23 +27,36 @@
 
         a {
             text-align: center;
+            text-decoration: none;
+            color: red;
+
         }
 
-        #header {
+        a:hover {
+            color: grey;
+        }
+
+        #pHeader {
+            width: 45%;
             color: red;
             margin-top: 30px;
+            font-size: 40px;
+            font-weight: bold;
+            display: block;
+        }
+        
+        #header {
+            display: block;
         }
 
         #menu {
             background-color: red;
-            margin-left: 5%;
+            margin-left: 0px;
             left: 0px;
             top:0px;
             position: fixed;
             width: 100px;
             height: 100%;
-            background-color: red;
-            margin-left: 0px;
         }
 
         #menu a {
@@ -86,17 +99,100 @@
             color: red;
             text-align: right;
         }
+
+        tr, td {
+            color: black;
+            border-bottom: 1px solid;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        .threadTitle {
+            width: 40%;
+            height: 50px;
+            vertical-align: middle;
+            text-align: left;
+        }
+
+        .threadDateTime {
+            width: 15%;
+            height: 50px;
+            vertical-align: middle;
+            text-align: center;
+            border-left: 1px solid;
+        }
+
+        .threadUsername {
+            width: 20%;
+            height: 50px;
+            vertical-align: middle;
+            text-align: center;
+            border-left: 1px solid;
+        }
+
+        .threadHover:hover {
+            background-color: whitesmoke;
+            color: gray;
+        }
+
+        .threadHover:hover a {
+            background-color: whitesmoke;
+            color: gray;
+        }
+
+        th {
+            border-bottom: 1px solid;
+        }
+
+        #newThread {
+            color: white;
+            font-weight: bold;
+            width: 15%;
+            height: 50px;
+            background-color: red;
+            text-align: center;
+            vertical-align: middle;
+            line-height: 50px;
+            display: block;
+            margin-left: auto;
+            margin-right: 0px;
+            margin-top: 30px;
+            border: 1px solid;
+        }
+
+        #newThread:hover {
+            background-color: white;
+            color: red;
+            border: 1px solid;
+        }
     </style>
 </head>
 <body>
 <div id="fullBody">
     <nav id="menu">
-        <a href="categorie.php">Categorie</a><br>
-        <a href="forumdb.php">Forum</a><br>
+        <a href="categorie.php">Forum</a><br>
         <a href="index.php" id="login"><?php include_once "loginCheck.php"; if($_SESSION['Logged'] != ''){ echo 'Logout'; } else { echo 'Registreer|Login'; } ?></a>
     </nav>
-    <div id="header">
-        <h1>THREADS</h1>
+    <div  id="header">
+        <div id="pHeader">
+            <?php
+            include_once 'DBConnect.php';
+            global $dbh;
+            $cat = htmlentities($_GET['cat']);
+            $resultThreads = mysqli_query($dbh, "SELECT Title FROM tblCategorie WHERE CategorieID='".htmlentities($cat)."'");
+            $result = mysqli_fetch_array($resultThreads);
+            echo "<a href=categorie.php?cat=".$cat.">".$result['Title']."</a>";
+            ?>
+            </div>
+        <?php
+        echo "<a href='addThread.php?cat=";
+        echo htmlentities($_GET['cat'])."'>";
+        $_SESSION['currentCat'] = $_GET['cat'];
+        ?>
+
+            <div id="newThread">New Thread</div></a>
     </div>
 
     <div id='divMain'>
@@ -104,6 +200,7 @@
             <div id='historyMessages' >
                 <?php
                 include_once 'DBConnect.php';
+
                 if (isset($_GET['cat'])) {
                     $cat = $_GET['cat'];
                     if ($dbh->connect_errno) {
@@ -120,23 +217,87 @@
 
                 function loadThreads($categorie) {
                     global $dbh;
-                    $resultThreads = mysqli_query($dbh, "SELECT Title, UserID, DateTime, ThreadID FROM tblThreads WHERE CategorieID='".$categorie."'");
-                    echo "<table>";
+
+                    $resultThreads = mysqli_query($dbh, "SELECT * FROM tblThreads WHERE CategorieID='".$categorie."' ORDER BY LastEdited DESC");
+                    $resultThread = mysqli_fetch_array($resultThreads);
+
+                    $sql = "SELECT ThreadID as TID FROM tblviewedthreads WHERE UserID='".htmlentities(getUserID($_SESSION['Logged']))."'";
+
+                    $resultViews = mysqli_query($dbh, $sql);
+                    //$resViews = mysqli_fetch_array($resultViews);
+
+                    //if ($resViews == null) {
+                    //    $resViewID = 0;
+                    //} else {
+                    //    $resViewID = $resViews[0];
+                    //}
+
+                    echo "<table class='threadTable'>";
+                    echo "<tr class='threadTableHeader'>";
+                    echo "<th>";
+                    echo "Title";
+                    echo "</th>";
+                    echo "<th>";
+                    echo "Created";
+                    echo "</th>";
+                    echo "<th>";
+                    echo "Last Edited";
+                    echo "</th>";
+                    echo "</tr>";
+
+                    $views = array();
+                    $i = 0;
+                    while ($resViews = mysqli_fetch_array($resultViews)) {
+                        $views[$i] = $resViews[0];
+                        $i++;
+                    }
+
+                    var_dump(count($views));
+                    var_dump($views);
+
+                    $i = 0;
                     while ($resultThread = mysqli_fetch_array($resultThreads)) {
-                        echo "<tr>";
-                        echo "<td>";
-                        echo "<a href='showthread.php?cat=".$categorie."&thread=".$resultThread['ThreadID']."'>".$resultThread['Title']."</a>";
+
+                        global $resViews;
+                        echo "<tr class='threadHover'>";
+                        echo "<td class='threadTitle'>";
+                        if ($i < count($views)) {
+                            if ($views[$i] == $resultThread['ThreadID'])
+                            {
+                                echo "<a href='showthread.php?cat=".$categorie."&thread=".$resultThread['ThreadID']."'>".$resultThread['Title']."</a>";
+                                if ($i < count($views)) {
+                                    $i++;
+                                } else {
+                                    echo $i;
+                                }
+
+                            } else {
+                                echo "<h3><a href='showthread.php?cat=".$categorie."&thread=".$resultThread['ThreadID']."'>".$resultThread['Title']."</a></h3>";
+                                if ($i < count($views)) {
+                                    $i++;
+                                } else {
+                                    echo $i;
+                                }
+                            }
+                        } else {
+                            echo "<h3><a href='showthread.php?cat=".$categorie."&thread=".$resultThread['ThreadID']."'>".$resultThread['Title']."</a></h3>";
+
+                        }
                         echo "</td>";
-                        echo "<td>";
-                        echo "<a href='profiel.php?Username=".getUsername($resultThread['UserID'])."'>".getUsername($resultThread['UserID'])."</a>";
-                        echo "</td>";
-                        echo "<td>";
+                        echo "<td  class='threadUsername'>";
+                        echo "<a href='profiel.php?Username=".getUsername($resultThread['UserID'])."'>".getUsername($resultThread['UserID'])."</a><br>";
                         echo $resultThread['DateTime'];
                         echo "</td>";
+                        echo "<td  class='threadDateTime'>";
+                        echo "<a href='profiel.php?Username=".getUsername($resultThread['LastEditedUserID'])."'>".getUsername($resultThread['LastEditedUserID'])."</a><br>";
+                        echo $resultThread['LastEdited'];
+                        echo "</td>";
                         echo "</tr>";
+
+
+
                     }
                     echo "</table>";
-
                 }
 
                 function getUsername($id) {
@@ -147,6 +308,12 @@
                 }
 
 
+                function getUserID($username) {
+                    global $dbh;
+                    $resultUserID = mysqli_query($dbh, "SELECT UserID FROM tblusers WHERE Username='".$username."'");
+                    $resultUser = mysqli_fetch_array($resultUserID);
+                    return $resultUser['UserID'];
+                }
 
 
                 ?>

@@ -47,9 +47,9 @@
       <file leaf-file-name="srcGetProfile.php" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/srcGetProfile.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="20" column="4" selection-start="872" selection-end="872" vertical-scroll-proportion="0.40927693" vertical-offset="0" max-vertical-offset="733">
+            <state line="20" column="7" selection-start="875" selection-end="875" vertical-scroll-proportion="0.40927693" vertical-offset="0" max-vertical-offset="733">
               <folding>
-                <marker date="1413211790000" expanded="true" signature="284:325" placeholder="SELECT * FRO..tblusers..." />
+                <marker date="1413213674000" expanded="true" signature="284:325" placeholder="SELECT * FRO..tblusers..." />
               </folding>
             </state>
           </provider>
@@ -580,9 +580,9 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/srcGetProfile.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="4" selection-start="872" selection-end="872" vertical-scroll-proportion="0.40927693" vertical-offset="0" max-vertical-offset="733">
+        <state line="20" column="7" selection-start="875" selection-end="875" vertical-scroll-proportion="0.40927693" vertical-offset="0" max-vertical-offset="733">
           <folding>
-            <marker date="1413211790000" expanded="true" signature="284:325" placeholder="SELECT * FRO..tblusers..." />
+            <marker date="1413213674000" expanded="true" signature="284:325" placeholder="SELECT * FRO..tblusers..." />
           </folding>
         </state>
       </provider>

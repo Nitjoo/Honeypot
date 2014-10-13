@@ -18,5 +18,5 @@
         $result->close();
         $stmt->close();
     }
-    //jups  
+    //jajaja 
 ?>
